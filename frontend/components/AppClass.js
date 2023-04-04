@@ -6,16 +6,26 @@ const initialEmail = ''
 const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
 
-const initialState = {
-  message: initialMessage,
-  email: initialEmail,
-  index: initialIndex,
-  steps: initialSteps,
-}
+// const initialState = {
+//   message: initialMessage,
+//   email: initialEmail,
+//   index: initialIndex,
+//   steps: initialSteps,
+// }
 
 export default class AppClass extends React.Component {
-  // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
-  // You can delete them and build your own logic from scratch.
+  constructor() {
+    super();
+    this.state = {
+        message: initialMessage,
+        email: initialEmail,
+        index: initialIndex,
+        steps: initialSteps,
+    }
+    
+  }
+
+  
 
   getXY = () => {
     // It it not necessary to have a state to track the coordinates.
@@ -29,13 +39,21 @@ export default class AppClass extends React.Component {
   }
 
   reset = () => {
-    // Use this helper to reset all states to their initial values.
+    this.setState({...this.state, message: initialMessage});
+    this.setState({...this.state, email: initialEmail});
+    this.setState({...this.state, index: initialIndex});
+    this.setState({...this.state, steps: initialSteps});
   }
 
   getNextIndex = (direction) => {
+    const newIndex = initialIndex 
     // This helper takes a direction ("left", "up", etc) and calculates what the next index
     // of the "B" would be. If the move is impossible because we are at the edge of the grid,
     // this helper should return the current index unchanged.
+    if(direction === "left") {
+      newIndex = newIndex--
+      
+    }
   }
 
   move = (evt) => {
@@ -44,10 +62,13 @@ export default class AppClass extends React.Component {
   }
 
   onChange = (evt) => {
-    // You will need this to update the value of the input.
+    evt.preventDefault();
+    this.setState({...this.state.email, email: evt.target.value});
+    console.log(evt.target.value)
   }
 
   onSubmit = (evt) => {
+    evt.preventDefault();
     // Use a POST request to send a payload to the server.
   }
 
@@ -57,7 +78,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">Coordinates (2, 2)</h3>
-          <h3 id="steps">You moved 0 times</h3>
+          <h3 id="steps">You moved {initialSteps} times</h3>
         </div>
         <div id="grid">
           {
@@ -72,15 +93,15 @@ export default class AppClass extends React.Component {
           <h3 id="message"></h3>
         </div>
         <div id="keypad">
-          <button id="left">LEFT</button>
+          <button id="left" onClick={this.move}>LEFT</button>
           <button id="up">UP</button>
           <button id="right">RIGHT</button>
           <button id="down">DOWN</button>
-          <button id="reset">reset</button>
+          <button id="reset" onClick={this.reset}>reset</button>
         </div>
         <form>
-          <input id="email" type="email" placeholder="type email"></input>
-          <input id="submit" type="submit"></input>
+          <input id="email" type="email" placeholder="type email" onChange={this.onChange}></input>
+          <input id="submit" type="submit" onSubmit={this.onSubmit}></input>
         </form>
       </div>
     )
