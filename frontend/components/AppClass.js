@@ -27,9 +27,13 @@ export default class AppClass extends React.Component {
 
   
 
-  getXY = () => {
+  getXY = (coord) => {
     // It it not necessary to have a state to track the coordinates.
     // It's enough to know what index the "B" is at, to be able to calculate them.
+    console.log("coord", coord)
+   
+    return (coord % 3)
+    
   }
 
   getXYMessage = () => {
@@ -46,25 +50,68 @@ export default class AppClass extends React.Component {
   }
 
   getNextIndex = (direction) => {
-    const newIndex = initialIndex 
     // This helper takes a direction ("left", "up", etc) and calculates what the next index
     // of the "B" would be. If the move is impossible because we are at the edge of the grid,
     // this helper should return the current index unchanged.
-    if(direction === "left") {
-      newIndex = newIndex--
-      
+    let rowChange = false;
+    // console.log(direction)
+    let index = this.state.index
+    let newIndex = index
+    
+    // console.log(newIndex)
+    if(direction === "up") {
+      rowChange = true;
+      newIndex = newIndex - 3
+      // Object.assign({newXY: (newIndex -= 3)})
+      // newIndex -= 3
     }
+    if(direction === "down") {
+      rowChange = true
+      newIndex = newIndex + 3
+      // Object.assign({newXY: (newIndex += 3)})
+      // newIndex += 3
+    }
+    
+    if(direction === "left") {
+      newIndex--
+      // Object.assign({newXY: (newIndex --)})
+      // newIndex--
+    }
+    if(direction === "right") {
+      newIndex++
+      // Object.assign({newXY: (newIndex ++)})
+      // newIndex++
+    }
+    // Object.assign({newXY: newIndex})
+
+    // console.log(rowChange)
+    console.log("new", newIndex)
+    return newIndex
   }
 
   move = (evt) => {
+    
+    let newIdx = this.getNextIndex(evt.target.id);
+    this.setState({...this.state, index: newIdx})
+    let newXY = this.getXY(newIdx);
+    // console.log(newXY)
+    console.log("Move" ,  newIdx)
+    console.log("newXY",newXY)
+    return newIdx
+    
     // This event handler can use the helper above to obtain a new index for the "B",
     // and change any states accordingly.
   }
 
   onChange = (evt) => {
+    if(evt.target.id === "reset") {
+      this.reset
+      console.log(this.state)
+    }
     evt.preventDefault();
-    this.setState({...this.state.email, email: evt.target.value});
-    console.log(evt.target.value)
+    let newInput = evt.target.value
+    this.setState({...this.state.email, email: newInput});
+    
   }
 
   onSubmit = (evt) => {
@@ -94,10 +141,10 @@ export default class AppClass extends React.Component {
         </div>
         <div id="keypad">
           <button id="left" onClick={this.move}>LEFT</button>
-          <button id="up">UP</button>
-          <button id="right">RIGHT</button>
-          <button id="down">DOWN</button>
-          <button id="reset" onClick={this.reset}>reset</button>
+          <button id="up" onClick={this.move}>UP</button>
+          <button id="right" onClick={this.move}>RIGHT</button>
+          <button id="down" onClick={this.move}>DOWN</button>
+          <button id="reset" onClick={this.onChange}>reset</button>
         </div>
         <form>
           <input id="email" type="email" placeholder="type email" onChange={this.onChange}></input>
