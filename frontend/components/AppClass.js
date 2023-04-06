@@ -12,7 +12,9 @@ const initialIndex = 4 // the index the "B" is at
 //   index: initialIndex,
 //   steps: initialSteps,
 // }
-
+let steps = 0;
+let first = 2;
+let second = 2;
 export default class AppClass extends React.Component {
   constructor() {
     super();
@@ -30,9 +32,12 @@ export default class AppClass extends React.Component {
   getXY = (coord) => {
     // It it not necessary to have a state to track the coordinates.
     // It's enough to know what index the "B" is at, to be able to calculate them.
-    console.log("coord", coord)
+   first = (first * 0) + (coord % 3) + 1
+   second = (second * 0) + (Math.floor(coord / 3) + 1)
    
-    return (coord % 3)
+   return [first, second]
+   
+    
     
   }
 
@@ -60,25 +65,49 @@ export default class AppClass extends React.Component {
     
     // console.log(newIndex)
     if(direction === "up") {
-      rowChange = true;
-      newIndex = newIndex - 3
+      if(newIndex === 0 || newIndex === 1 || newIndex ===2) {
+        newIndex = newIndex
+      } else {
+        rowChange = true;
+        steps++
+        newIndex = newIndex - 3
+      }
+      
       // Object.assign({newXY: (newIndex -= 3)})
       // newIndex -= 3
     }
     if(direction === "down") {
-      rowChange = true
-      newIndex = newIndex + 3
+      if(newIndex === 6 || newIndex === 7 || newIndex === 8) {
+        newIndex = newIndex
+      } else {
+        rowChange = true
+        steps++
+        newIndex = newIndex + 3
+      }
+      
       // Object.assign({newXY: (newIndex += 3)})
       // newIndex += 3
     }
     
     if(direction === "left") {
-      newIndex--
+      if(newIndex === 0 || newIndex === 3 || newIndex === 6) {
+        newIndex = newIndex
+      } else {
+        steps++
+        newIndex--
+      }
+      
       // Object.assign({newXY: (newIndex --)})
       // newIndex--
     }
     if(direction === "right") {
-      newIndex++
+      if(newIndex === 2 || newIndex === 5 || newIndex === 8) {
+        newIndex = newIndex
+      } else {
+        steps++
+        newIndex++
+      }
+      
       // Object.assign({newXY: (newIndex ++)})
       // newIndex++
     }
@@ -96,7 +125,7 @@ export default class AppClass extends React.Component {
     let newXY = this.getXY(newIdx);
     // console.log(newXY)
     console.log("Move" ,  newIdx)
-    console.log("newXY",newXY)
+    console.log("newXY", newXY)
     return newIdx
     
     // This event handler can use the helper above to obtain a new index for the "B",
@@ -124,8 +153,8 @@ export default class AppClass extends React.Component {
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">Coordinates (2, 2)</h3>
-          <h3 id="steps">You moved {initialSteps} times</h3>
+          <h3 id="coordinates">Coordinates ({first}, {second})</h3>
+          <h3 id="steps">You moved {steps} times</h3>
         </div>
         <div id="grid">
           {
