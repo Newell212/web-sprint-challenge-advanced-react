@@ -1,4 +1,6 @@
 import React from 'react'
+// import '../styles/styles.css'
+// import '../styles/reset.css'
 
 // Suggested initial states
 const initialMessage = ''
@@ -12,7 +14,7 @@ const initialIndex = 4 // the index the "B" is at
 //   index: initialIndex,
 //   steps: initialSteps,
 // }
-let steps = 0;
+let steps = initialSteps;
 let first = 2;
 let second = 2;
 export default class AppClass extends React.Component {
@@ -48,10 +50,9 @@ export default class AppClass extends React.Component {
   }
 
   reset = () => {
-    this.setState({...this.state, message: initialMessage});
-    this.setState({...this.state, email: initialEmail});
-    this.setState({...this.state, index: initialIndex});
-    this.setState({...this.state, steps: initialSteps});
+    steps = initialSteps
+    this.setState({index: initialIndex})
+    
   }
 
   getNextIndex = (direction) => {
@@ -63,7 +64,14 @@ export default class AppClass extends React.Component {
     let index = this.state.index
     let newIndex = index
     
-    // console.log(newIndex)
+
+   if(direction === "reset") {
+    newIndex = 4
+    steps = initialSteps
+    console.log(newIndex)
+    this.setState({email: initialEmail})
+   }
+   
     if(direction === "up") {
       if(newIndex === 0 || newIndex === 1 || newIndex ===2) {
         newIndex = newIndex
@@ -108,13 +116,9 @@ export default class AppClass extends React.Component {
         newIndex++
       }
       
-      // Object.assign({newXY: (newIndex ++)})
-      // newIndex++
+      
     }
-    // Object.assign({newXY: newIndex})
-
-    // console.log(rowChange)
-    console.log("new", newIndex)
+    
     return newIndex
   }
 
@@ -123,6 +127,7 @@ export default class AppClass extends React.Component {
     let newIdx = this.getNextIndex(evt.target.id);
     this.setState({...this.state, index: newIdx})
     let newXY = this.getXY(newIdx);
+    
     // console.log(newXY)
     console.log("Move" ,  newIdx)
     console.log("newXY", newXY)
@@ -133,10 +138,12 @@ export default class AppClass extends React.Component {
   }
 
   onChange = (evt) => {
-    if(evt.target.id === "reset") {
-      this.reset
-      console.log(this.state)
-    }
+    // if(evt.target.id === "reset") {
+    //   this.reset
+    //   steps = initialSteps
+    //   this.setState({index: initialIndex})
+      // console.log(this.state.index)
+    // }
     evt.preventDefault();
     let newInput = evt.target.value
     this.setState({...this.state.email, email: newInput});
@@ -166,17 +173,17 @@ export default class AppClass extends React.Component {
           }
         </div>
         <div className="info">
-          <h3 id="message"></h3>
+          <h3 id="message" value={this.state.message}></h3>
         </div>
         <div id="keypad">
           <button id="left" onClick={this.move}>LEFT</button>
           <button id="up" onClick={this.move}>UP</button>
           <button id="right" onClick={this.move}>RIGHT</button>
           <button id="down" onClick={this.move}>DOWN</button>
-          <button id="reset" onClick={this.onChange}>reset</button>
+          <button id="reset" onClick={this.move}>reset</button>
         </div>
         <form>
-          <input id="email" type="email" placeholder="type email" onChange={this.onChange}></input>
+          <input id="email" type="email" placeholder="type email" onChange={this.onChange} value={this.state.email}></input>
           <input id="submit" type="submit" onSubmit={this.onSubmit}></input>
         </form>
       </div>
