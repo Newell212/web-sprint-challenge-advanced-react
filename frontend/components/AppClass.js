@@ -1,6 +1,5 @@
 import React from 'react'
-// import '../styles/styles.css'
-// import '../styles/reset.css'
+import axios from 'axios'
 
 // Suggested initial states
 const initialMessage = ''
@@ -56,7 +55,7 @@ export default class AppClass extends React.Component {
       message: initialMessage
     });
 
-    console.log(this.state)
+    
   }
 
   getNextIndex = (direction) => {
@@ -69,8 +68,7 @@ export default class AppClass extends React.Component {
     let steps = this.state.steps
     let message = initialMessage
 
-    console.log("getNextIndex state: ")
-    console.log(this.state)
+    
 
     if (direction === "up") {
       if (newIndex === 0 || newIndex === 1 || newIndex === 2) {
@@ -133,14 +131,33 @@ export default class AppClass extends React.Component {
     this.setState({ email: evt.target.value });
 
     if (evt.target.id === 'email') {
-      console.log(evt.target.value)
+     
     }
 
   }
 
   onSubmit = (evt) => {
     evt.preventDefault();
-    // Use a POST request to send a payload to the server.
+    let message = initialMessage;
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    
+      axios.post('http://localhost:9000/api/result', {
+      x: first,
+      y: second,
+      steps: this.state.steps,
+      email: this.state.email
+    
+    }) 
+    .then((res) => {
+      this.reset()
+      message = res.data.message
+      this.setState({message: message})
+    })
+    .catch(() => {
+      this.reset()
+      message = "Ouch: email must be a valid email"
+      this.setState({message: message})
+    })
   }
 
   render() {
@@ -172,7 +189,7 @@ export default class AppClass extends React.Component {
         </div>
         <form>
           <input id="email" type="email" placeholder="type email" onChange={this.onChange} value={this.state.email}></input>
-          <input id="submit" type="submit" onSubmit={this.onSubmit}></input>
+          <input id="submit" type="submit" onClick={this.onSubmit}></input>
         </form>
       </div>
     )
