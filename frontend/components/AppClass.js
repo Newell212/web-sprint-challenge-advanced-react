@@ -24,7 +24,7 @@ export default class AppClass extends React.Component {
       email: initialEmail,
       index: initialIndex,
       steps: initialSteps,
-      time: ''
+      time: 'You moved 0 times'
     }
   }
 
@@ -46,7 +46,7 @@ export default class AppClass extends React.Component {
     // returns the fully constructed string.
     let coords = this.getXY()
 
-    return `Coordinates (${coords[0]}, ${coords[1]})`
+    return ` (${coords[0]}, ${coords[1]})`
   }
 
   reset = (evt) => {
@@ -54,7 +54,8 @@ export default class AppClass extends React.Component {
       steps: initialSteps,
       index: initialIndex,
       email: initialEmail,
-      message: initialMessage
+      message: initialMessage,
+      time: 'You moved 0 times'
     });
 
     
@@ -69,7 +70,7 @@ export default class AppClass extends React.Component {
     let newIndex = this.state.index
     let steps = this.state.steps
     let message = initialMessage
-
+    let time = '';
     
     
 
@@ -114,32 +115,28 @@ export default class AppClass extends React.Component {
         newIndex++
       }
     }
+    if(steps === 1) {
+      time = `You moved ${steps} time`
+    } else {
+      time = `You moved ${steps} times`
+    }
 
     this.setState(
       {
         message: message,
         steps: steps,
-        index: newIndex
+        index: newIndex,
+        time: time
       }
     )
+    console.log(this.state.time)
   }
 
   move = (evt) => {
     this.getNextIndex(evt.target.id);
-    this.pluralTimes()
   }
 
-  pluralTimes = () => {
-    let time = ''
-    if(this.state.steps === 1) {
-      time = 'time'
-      this.setState({time: time})
-    } else {
-      time = 'times'
-      this.setState({time: time})
-    }
-    console.log(this.state.steps)
-  }
+ 
 
   onChange = (evt) => {
 
@@ -192,8 +189,8 @@ export default class AppClass extends React.Component {
     return (
       <div id="wrapper" className={className}>
         <div className="info">
-          <h3 id="coordinates">{this.getXYMessage()}</h3>
-          <h3 id="steps">You moved {this.state.steps} {this.state.time}</h3>
+          <h3 id="coordinates">Coordinates {this.getXYMessage()}</h3>
+          <h3 id="steps">{this.state.time}</h3>
         </div>
         <div id="grid">
           {
