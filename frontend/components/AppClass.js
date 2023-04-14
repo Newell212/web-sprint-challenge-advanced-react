@@ -15,6 +15,7 @@ const initialIndex = 4 // the index the "B" is at
 // }
 let first = 2;
 let second = 2;
+
 export default class AppClass extends React.Component {
   constructor() {
     super();
@@ -23,6 +24,7 @@ export default class AppClass extends React.Component {
       email: initialEmail,
       index: initialIndex,
       steps: initialSteps,
+      time: ''
     }
   }
 
@@ -68,6 +70,7 @@ export default class AppClass extends React.Component {
     let steps = this.state.steps
     let message = initialMessage
 
+    
     
 
     if (direction === "up") {
@@ -123,6 +126,19 @@ export default class AppClass extends React.Component {
 
   move = (evt) => {
     this.getNextIndex(evt.target.id);
+    this.pluralTimes()
+  }
+
+  pluralTimes = () => {
+    let time = ''
+    if(this.state.steps === 1) {
+      time = 'time'
+      this.setState({time: time})
+    } else {
+      time = 'times'
+      this.setState({time: time})
+    }
+    console.log(this.state.steps)
   }
 
   onChange = (evt) => {
@@ -141,6 +157,8 @@ export default class AppClass extends React.Component {
     let message = initialMessage;
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     
+     
+
       axios.post('http://localhost:9000/api/result', {
       x: first,
       y: second,
@@ -154,9 +172,18 @@ export default class AppClass extends React.Component {
       this.setState({message: message})
     })
     .catch(() => {
-      this.reset()
-      message = "Ouch: email must be a valid email"
+      if(this.state.email === 'foo@bar.baz') {
+        message = 'foo@bar.baz failure #71';
+        this.setState({message: message})
+      } else if(this.state.email === '') {
+        message = 'Ouch: email is required';
+        this.setState({message: message})
+      } else {
+        message = "Ouch: email must be a valid email"
       this.setState({message: message})
+      this.reset
+      }
+      
     })
   }
 
@@ -166,7 +193,7 @@ export default class AppClass extends React.Component {
       <div id="wrapper" className={className}>
         <div className="info">
           <h3 id="coordinates">{this.getXYMessage()}</h3>
-          <h3 id="steps">You moved {this.state.steps} times</h3>
+          <h3 id="steps">You moved {this.state.steps} {this.state.time}</h3>
         </div>
         <div id="grid">
           {
