@@ -164,9 +164,8 @@ export default class AppClass extends React.Component {
     
     }) 
     .then((res) => {
-      this.reset()
       message = res.data.message
-      this.setState({message: message})
+      this.setState({message: message, email: initialEmail})
     })
     .catch(() => {
       if(this.state.email === 'foo@bar.baz') {
