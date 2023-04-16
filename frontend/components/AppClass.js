@@ -129,7 +129,8 @@ export default class AppClass extends React.Component {
         time: time
       }
     )
-    console.log(this.state.time)
+    console.log(this.state.steps)
+    console.log(this.state.index)
   }
 
   move = (evt) => {

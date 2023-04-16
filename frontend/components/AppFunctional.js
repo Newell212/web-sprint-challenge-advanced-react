@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 // Suggested initial states
 const initialMessage = ''
@@ -9,6 +9,10 @@ const initialIndex = 4 // the index the "B" is at
 export default function AppFunctional(props) {
   // THE FOLLOWING HELPERS ARE JUST RECOMMENDATIONS.
   // You can delete them and build your own logic from scratch.
+  const [email, setEmail] = useState(initialEmail);
+  const [message, setMessage] = useState(initialMessage);
+  const [steps, setSteps] = useState(initialSteps);
+  const [index, setIndex] = useState(initialIndex);
 
   function getXY() {
     // It it not necessary to have a state to track the coordinates.
@@ -29,11 +33,50 @@ export default function AppFunctional(props) {
     // This helper takes a direction ("left", "up", etc) and calculates what the next index
     // of the "B" would be. If the move is impossible because we are at the edge of the grid,
     // this helper should return the current index unchanged.
+    let newSteps = steps;
+    let newIndex = index
+    let newMessage = ""
+
+
+    if(direction === 'up') {
+      newSteps++
+      newIndex -= 3
+      setIndex(newIndex)
+      setSteps(newSteps)
+    }
+
+    if(direction === 'right') {
+      newSteps++
+      newIndex++
+      setIndex(newIndex)
+      setSteps(newSteps)
+    }
+
+    if(direction === 'left') {
+      newSteps++
+      newIndex--
+      setIndex(newIndex)
+      setSteps(newSteps)
+    }
+
+    if(direction === 'down') {
+      newSteps++
+      newIndex += 3
+      setIndex(newIndex)
+      setSteps(newSteps)
+    }
+    
+    
+    
+    // console.log("message" , message)
+    console.log("steps" , steps)
+    console.log("index" , index)
   }
 
   function move(evt) {
     // This event handler can use the helper above to obtain a new index for the "B",
     // and change any states accordingly.
+    getNextIndex(evt.target.id)
   }
 
   function onChange(evt) {
@@ -63,10 +106,10 @@ export default function AppFunctional(props) {
         <h3 id="message"></h3>
       </div>
       <div id="keypad">
-        <button id="left">LEFT</button>
-        <button id="up">UP</button>
-        <button id="right">RIGHT</button>
-        <button id="down">DOWN</button>
+        <button id="left" onClick={move}>LEFT</button>
+        <button id="up" onClick={move}>UP</button>
+        <button id="right" onClick={move}>RIGHT</button>
+        <button id="down" onClick={move}>DOWN</button>
         <button id="reset">reset</button>
       </div>
       <form>
