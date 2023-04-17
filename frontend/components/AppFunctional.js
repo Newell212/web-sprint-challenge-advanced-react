@@ -6,6 +6,8 @@ const initialMessage = ''
 const initialEmail = ''
 const initialSteps = 0
 const initialIndex = 4 // the index the "B" is at
+const initialTime = 'You moved 0 times'
+
 
 let first = 2;
 let second = 2;
@@ -17,7 +19,7 @@ export default function AppFunctional(props) {
   const [message, setMessage] = useState(initialMessage);
   const [steps, setSteps] = useState(initialSteps);
   const [index, setIndex] = useState(initialIndex);
-  const [time, setTime] = useState('times')
+  const [time, setTime] = useState(initialTime)
 
   function getXY() {
     // It it not necessary to have a state to track the coordinates.
@@ -43,7 +45,7 @@ export default function AppFunctional(props) {
     setMessage(initialMessage);
     setSteps(initialSteps);
     setIndex(initialIndex);
-    setTime('times');
+    setTime(initialTime);
     setEmail(initialEmail)
   }
 
@@ -108,10 +110,10 @@ export default function AppFunctional(props) {
       }
     }
     
-    if(steps === 0) {
-      times = 'time'
+    if(newSteps === 1) {
+      times = `You moved ${newSteps} time`
     } else {
-      times = 'times'
+      times = `You moved ${newSteps} times`
     }
     
     
@@ -159,14 +161,14 @@ export default function AppFunctional(props) {
       }
       
     })
-    reset()
+    setEmail(initialEmail)
   }
 
   return (
     <div id="wrapper" className={props.className}>
       <div className="info">
         <h3 id="coordinates">Coordinates {getXYMessage()}</h3>
-        <h3 id="steps">You moved {steps} {time}</h3>
+        <h3 id="steps">{time}</h3>
       </div>
       <div id="grid">
         {
