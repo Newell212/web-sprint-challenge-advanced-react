@@ -129,8 +129,6 @@ export default class AppClass extends React.Component {
         time: time
       }
     )
-    console.log(this.state.steps)
-    console.log(this.state.index)
   }
 
   move = (evt) => {
@@ -144,9 +142,7 @@ export default class AppClass extends React.Component {
     evt.preventDefault();
     this.setState({ email: evt.target.value });
 
-    if (evt.target.id === 'email') {
-     
-    }
+    
 
   }
 
